@@ -1,0 +1,57 @@
+extends layout
+
+block content
+    link(rel="stylesheet" href="/stylesheets/chat.css")
+    link(rel="stylesheet" href="/stylesheets/scrollbar.css")
+    div#resizableFrame.w3-display-topright(style="height:100%;width:40%;overflow:hidden; padding-bottom: 20px;" +
+    " padding-right: 20px;")
+        div#users(style="width: 100%; height: 100%; border:1.5px solid #1b97f3;" +
+        "font:16px/26px Georgia, Garamond, Serif;overflow-y: scroll; overflow-x: hidden")
+    div#res-msg-inp.w3-container.w3-card-4.w3-half.w3-display-topleft(style="width:500px")
+        p#username= nickname
+        p#money= `Средства: ${money}`
+        p
+            label.w3-label.w3-validate Введите сообщение:
+            input#msg.w3-input(placeholder='Message')
+        p
+            button#send.w3-btn.w3-padding.w3-teal Отправить сообщение
+
+    script(src="/socket.io/socket.io.js")
+    script.
+        $(document).ready(function(){
+            chat();
+            $('#send').on('click', send);
+        });
+        var socket;
+        var isRight = true;
+        $("#resizableFrame, #res-msg-inp").draggable({
+            cursor: "move"
+        });
+        $("#resizableFrame").resizable({
+            maxHeight: 723,
+            maxWidth: 750,
+            minHeight: 200,
+            minWidth: 200
+        });
+        function chat() {
+            socket = io.connect('http://localhost');
+            socket.on('connect', function () {
+                socket.json.emit('hello', {'name': $('#username').text()});
+                socket.on('msg', function (msg) {
+                    if (isRight) {
+                        $('#users').append(`<div class="container"><p style="word-wrap: break-word;">${msg.message}</p>
+                                        <span class="time-right">${msg.time}</span></div>`)
+                        isRight = false;
+                    } else {
+                        $('#users').append(`<div class="container darker"><p style="word-wrap: break-word;">
+                                        ${msg.message}</p><span class="time-left">${msg.time}</span></div>`)
+                        isRight = true;
+                    }
+                });
+            });
+        }
+        function send() {
+            if (socket) {
+                socket.json.emit('msg', {name: $('#username').text(), value: $('#msg').val()});
+            }
+        }

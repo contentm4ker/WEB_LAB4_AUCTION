@@ -1,0 +1,38 @@
+extends layout
+
+block content
+    span#out
+    script(src="/socket.io/socket.io.js")
+    div.w3-container.w3-half.w3-display-middle(style="width:500px")
+        form.w3-container.w3-card-4
+            p
+                label#alertlabel.w3-label.w3-validate.w3-red(hidden)
+                input#nickname.w3-input(type="text", style="width:90%", required)
+                label.w3-label.w3-validate Введите ваше имя
+            p
+                button#s-btn.w3-btn.w3-padding.w3-teal(type="button",
+                | onclick="postNickname()", disabled) Посетить аукцион &nbsp
+    script.
+        $('#nickname').keyup(function () {
+            $('#s-btn').prop('disabled', $(this).val().length === 0);
+            $('#alertlabel').hide();
+        });
+
+        function postNickname() {
+            $.ajax({
+                url: '/',
+                type: 'POST',
+                data:
+                {
+                    nickname: $('#nickname').val()
+                },
+                success: function (data, status) {
+                    $(location).attr('href', `http://localhost/user?` +
+                    `name=${data.nickname}&money=${data.money}`);
+                },
+                error: function (data, status) {
+                    $('#alertlabel').text(`${status}: ${data.responseJSON.message}`).show();
+
+                }
+            });
+        }
