@@ -49,8 +49,8 @@
   },
   "auctSettings": {
     "DateTime": "2019-07-05T15:30",
-    "timeout": "2",
-    "researchPause": "15",
+    "timeout": "1",
+    "researchPause": "1",
     "allTime": "101"
   }
 }

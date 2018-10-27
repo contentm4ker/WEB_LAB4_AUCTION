@@ -39,6 +39,15 @@ io.sockets.on('connection', (socket) => {
             send(socket, `${socket['name']} вышел`, `${time}`);
         }
     });
+    socket.on('startauction', (msg) => {
+        socket.broadcast.emit('startauction', {
+            time: msg.time,
+            name: paintings[msg.ind].name,
+            author: paintings[msg.ind].author,
+            imgsrc: paintings[msg.ind].imgPath,
+            disc: paintings[msg.ind].discription
+        });
+    });
 });
 
 function send(socket, msg, time) {

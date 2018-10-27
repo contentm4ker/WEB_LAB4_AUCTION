@@ -19,6 +19,7 @@ block content
                     td= members[i].name
                     td= members[i].money
                 - }
+
     div#modal2.w3-modal
         div.w3-modal-content.w3-card-4.w3-animate-zoom(style="max-width:600px")
             header.w3-container.w3-indigo
@@ -49,6 +50,7 @@ block content
                                     img(src=pics[i].imgPath, alt=pics[i].name, width="300")
                     - }
                 - }
+
     div#modal3.w3-modal
         div.w3-modal-content.w3-card-4.w3-animate-zoom(style="max-width:600px")
             header.w3-container.w3-indigo
@@ -63,17 +65,25 @@ block content
                     td.w3-hover-blue= setts.DateTime.split("T")[1]
                 tr
                     th.w3-blue Таймаут продажи картины
-                    td.w3-hover-blue= setts.timeout + ' мин'
+                    td#timeout.w3-hover-blue= setts.timeout + ' мин'
                 tr
                     th.w3-blue Пауза на изучение
-                    td.w3-hover-blue= setts.researchPause + ' мин'
+                    td#researchPause.w3-hover-blue= setts.researchPause + ' мин'
                 tr
                     th.w3-blue Длительность аукциона
-                    td.w3-hover-blue= setts.allTime + ' мин'
+                    td#allTime.w3-hover-blue= setts.allTime + ' мин'
+
     div.w3-bar.w3-teal.w3-display-topleft
         button.w3-button.w3-teal.w3-bar-item(onclick="$('#modal1').css('display', 'block')") Пользователи
         button.w3-button.w3-teal.w3-bar-item(onclick="$('#modal2').css('display', 'block')") Картины
         button.w3-button.w3-teal.w3-bar-item(onclick="$('#modal3').css('display', 'block')") Настройки аукциона
+
+    div#admin-panel.w3-container.w3-card-4.w3-half.w3-display-left(style="width:500px")
+        header.w3-container.w3-indigo
+            h2.w3-center Панель управления аукционом
+        p#timer
+        p
+            button#start.w3-btn.w3-padding.w3-teal Начать аукцион
 
     div#resizableFrame.w3-display-middle(style="height:50%;width:25%;overflow:hidden; padding-bottom: 20px; padding-right: 20px;")
         div#users(style="width: 100%; height: 100%; border:1.5px solid #1b97f3;" +
