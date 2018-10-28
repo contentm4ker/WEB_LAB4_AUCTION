@@ -44,6 +44,7 @@ $(document).ready(function(){
                 $('#pic-name').text(msg.author + ' / ' + msg.name);
                 $('#pic-img, #pic-img-big').prop('src', msg.imgsrc);
                 $('#disc').text(msg.disc);
+                $('#info').text(msg.info);
             });
         });
     }

@@ -34,13 +34,13 @@ socket.on('connect', function () {
 var pic_num = 0;
 var research_time = $('#researchPause').text().split(' ')[0];
 var timeout = $('#timeout').text().split(' ')[0];
-function nextStepAuction(time) {
-    socket.json.emit('startauction', {time: time, ind: pic_num});
+function nextStepAuction(time, message) {
+    socket.json.emit('startauction', {time: time, ind: pic_num, msg: message});
     refresh(time);
 }
 
 $('#start').on('click', function() {
-    nextStepAuction(research_time);
+    nextStepAuction(research_time, 'Ознакомьтесь с картиной');
     $('#start').hide();
 });
 
@@ -52,8 +52,7 @@ function refresh(min)
         sec = 59;
         min = min - 1;
     }
-    if (sec <= 9) {sec = "0" + sec;}
-    time = (min <= 9 ? "0"+min : min) + ":" + sec;
+    let time=(min <= 9 ? "0"+min : min) + ":" + (sec <= 9 ? "0" + sec : sec);
     if (document.getElementById){timer.innerHTML=time;}
     inter = setTimeout(`refresh(${min})`, 1000);
     // действие, если таймер 00:00
@@ -61,14 +60,12 @@ function refresh(min)
         sec="0";
         clearInterval(inter);
         if (isNewAuctStep) {
-            nextStepAuction(timeout);
+            nextStepAuction(timeout, 'Аукцион');
             pic_num++;
             isNewAuctStep = false;
         } else {
-            nextStepAuction(research_time);
+            nextStepAuction(research_time, 'Ознакомьтесь с картиной');
             isNewAuctStep = true;
         }
-
-
     }
 }

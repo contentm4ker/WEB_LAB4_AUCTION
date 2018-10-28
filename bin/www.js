@@ -41,6 +41,7 @@ io.sockets.on('connection', (socket) => {
     });
     socket.on('startauction', (msg) => {
         socket.broadcast.emit('startauction', {
+            info: msg.msg,
             time: msg.time,
             name: paintings[msg.ind].name,
             author: paintings[msg.ind].author,
