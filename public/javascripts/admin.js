@@ -68,6 +68,8 @@ $('#start').on('click', function() {
 
 var sec=0;
 var isNewAuctStep = true;
+var picsnum = Number($('#picsnum').text());
+var iter = 0;
 function refresh(min)
 {
     if(--sec == -1) {
@@ -81,13 +83,18 @@ function refresh(min)
     if(min=='00' && sec=='00'){
         sec="0";
         clearInterval(inter);
-        if (isNewAuctStep) {
-            auctionStep();
-            isNewAuctStep = false;
+        iter++;
+        if (iter < picsnum*2) {
+            if (isNewAuctStep) {
+                auctionStep();
+                isNewAuctStep = false;
+            } else {
+                changePicture();
+                researchStep();
+                isNewAuctStep = true;
+            }
         } else {
-            changePicture();
-            researchStep();
-            isNewAuctStep = true;
+            alert('Аукцион закончен')
         }
     }
 }

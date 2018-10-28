@@ -34,8 +34,10 @@ block content
                     th Кому продана
                     th Цена продажи
                     th Картина
+                - var picsnum = 0;
                 - for(var i = 0; i < pics.length; i++) {
                     - if (pics[i].inAuct) {
+                    - picsnum++;
                     tr.w3-hover-blue
                         td= pics[i].ind + 1
                         td= pics[i].name
@@ -50,6 +52,7 @@ block content
                                     img(src=pics[i].imgPath, alt=pics[i].name, width="300")
                     - }
                 - }
+    p#picsnum(hidden)= picsnum
 
     div#modal3.w3-modal
         div.w3-modal-content.w3-card-4.w3-animate-zoom(style="max-width:600px")
