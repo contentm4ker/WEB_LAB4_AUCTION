@@ -36,6 +36,10 @@ $(document).ready(function(){
                 }
             });
             socket.on('startauction', function (msg) {
+                $('#info-pannel').show();
+                $('#img-info').show();
+                clearInterval(inter);
+                sec="0";
                 refresh(msg.time);
                 $('#pic-name').text(msg.author + ' / ' + msg.name);
                 $('#pic-img, #pic-img-big').prop('src', msg.imgsrc);
@@ -54,17 +58,16 @@ $(document).ready(function(){
 
 
 var sec=0;
+var inter;
 function refresh(min)
 {
     if(--sec == -1){
         sec = 59;
         min = min - 1;
     }
-    if (sec <= 9) {sec = "0" + sec;}
-    time=(min <= 9 ? "0"+min : min) + ":" + sec;
+    let time=(min <= 9 ? "0"+min : min) + ":" + (sec <= 9 ? "0" + sec : sec);
     if(document.getElementById){timer.innerHTML=time;}
     inter=setTimeout(`refresh(${min})`, 1000);
-    // действие, если таймер 00:00
     if(min=='00' && sec=='00'){
         sec="0";
         clearInterval(inter);

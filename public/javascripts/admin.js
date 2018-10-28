@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    var isRight = true;
     $("#resizableFrame, #admin-panel").draggable({
         cursor: "move",
         cursorAt: {
@@ -16,6 +15,7 @@ $(document).ready(function(){
     });
 });
 
+var isRight = true;
 var socket = io.connect('http://localhost');
 socket.on('connect', function () {
     socket.on('msg', function (msg) {
@@ -65,8 +65,8 @@ function refresh(min)
             pic_num++;
             isNewAuctStep = false;
         } else {
-            isNewAuctStep = true;
             nextStepAuction(research_time);
+            isNewAuctStep = true;
         }
 
 
