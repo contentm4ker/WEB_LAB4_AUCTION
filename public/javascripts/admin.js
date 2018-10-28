@@ -42,7 +42,7 @@ function startAuction() {
 }
 
 function auctionStep() {
-    socket.json.emit('auctionstep', {msg: 'Аукцион'});
+    socket.json.emit('auctionstep', {msg: 'Аукцион', ind: pic_num});
     socket.json.emit('refreshtimer', {time: timeout});
     refresh(timeout);
 }
@@ -58,7 +58,7 @@ function changePicture() {
 }
 
 function stopAuction() {
-    socket.json.emit('stopAuction', {ind: pic_num++});
+    socket.json.emit('stopauction', {ind: pic_num++});
 }
 
 $('#start').on('click', function() {

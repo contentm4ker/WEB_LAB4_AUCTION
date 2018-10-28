@@ -1,12 +1,20 @@
 $(document).ready(function(){
     $('#status').text(' ');
+
     $('#btn-request').hide();
+
     chat();
+
     $('#send').on('click', send);
+
+    $('#btn-increase').on('click', increaseBet);
+
     $('#btn-request').on('click', function () {
         socket.json.emit('msg', {name: $('#username').text(), value: 'Подал заявку на участие'});
         $('#status').text('Вы участвуете в аукционе на данную картину').show();
         $('#btn-request').hide();
+        if (isFirstRequest) my_bet = $('#money').text().split(' ')[1];
+        socket.json.emit('setcurrentbet', {money: my_bet});
     });
 
     var socket;
@@ -50,14 +58,27 @@ $(document).ready(function(){
                 $('#pic-name').text(msg.author + ' / ' + msg.name);
                 $('#pic-img, #pic-img-big').prop('src', msg.imgsrc);
                 $('#disc').text(msg.disc);
+                $('#pictureprice').text('Цена: ' + msg.price);
             });
             socket.on('auctionstep', (msg) => {
-                if ($('#status').text() == ' ')
+                if ($('#status').text() == ' ') {
                     $('#status').text('');
+                } else {
+                    $('#currentbet').text('Текущая ставка: ' + current_bet);
+                    $('#yourmoney').text('Ваша ставка: ' + my_bet);
+                    $('#minstep').val(msg.min);
+                    $('#maxstep').val(msg.max);
+                    $('#minsteplabel').text('Минимальная ставка: ' + msg.min);
+                    $('#maxsteplabel').text('Максимальная ставка: ' + msg.max);
+                    $('#auctionbox').show();
+                }
+
                 $('#info').text(msg.info);
                 $('#btn-request').hide();
             });
             socket.on('researchstep', (msg) => {
+                $('#auctionbox').hide();
+
                 $('#status').text(' ').hide();
                 $('#info').text(msg.info);
                 $('#btn-request').show();
@@ -69,6 +90,12 @@ $(document).ready(function(){
                 if ($('#status').text() == '') {
                     $('#status').text('Вы не принимаете участие в торгах, ожидайте').show();
                     $('#btn-request').hide();
+                }
+            });
+            socket.on('setcurrentbet', (msg) => {
+                if (msg.money != 0) {
+                    isFirstRequest = false;
+                    current_bet = msg.money;
                 }
             });
             socket.on('stopauction', (msg) => {
@@ -84,7 +111,9 @@ $(document).ready(function(){
         }
     }
 });
-
+var isFirstRequest = true;
+var current_bet = 0;
+var my_bet = 0;
 
 var sec=0;
 var inter;
@@ -101,4 +130,8 @@ function refresh(min)
         sec="0";
         clearInterval(inter);
     }
+}
+
+function increaseBet() {
+    $("input:radio:checked").val();
 }

@@ -46,7 +46,9 @@ io.sockets.on('connection', (socket) => {
     });
     socket.on('auctionstep', (msg) => {
         socket.broadcast.emit('auctionstep', {
-            info: msg.msg
+            info: msg.msg,
+            min: paintings[msg.ind].step.min,
+            max: paintings[msg.ind].step.max
         });
     });
     socket.on('researchstep', (msg) => {
@@ -59,12 +61,21 @@ io.sockets.on('connection', (socket) => {
             name: paintings[msg.ind].name,
             author: paintings[msg.ind].author,
             imgsrc: paintings[msg.ind].imgPath,
+            price: paintings[msg.ind].startPrice,
             disc: paintings[msg.ind].discription
         });
     });
     socket.on('refreshtimer', (msg) => {
         socket.broadcast.emit('refreshtimer', {
             time: msg.time
+        });
+    });
+    socket.on('setcurrentbet', (msg) => {
+        socket.json.emit('setcurrentbet', {
+            money: msg.money
+        });
+        socket.broadcast.emit('setcurrentbet', {
+            money: msg.money
         });
     });
     socket.on('stopauction', (msg) => {
