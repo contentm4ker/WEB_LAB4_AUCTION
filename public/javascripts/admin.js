@@ -34,13 +34,35 @@ socket.on('connect', function () {
 var pic_num = 0;
 var research_time = $('#researchPause').text().split(' ')[0];
 var timeout = $('#timeout').text().split(' ')[0];
-function nextStepAuction(time, message) {
-    socket.json.emit('startauction', {time: time, ind: pic_num, msg: message});
-    refresh(time);
+function startAuction() {
+    socket.json.emit('startauction', {time: research_time, msg: 'Ознакомьтесь с картиной'});
+    socket.json.emit('refreshtimer', {time: research_time});
+    changePicture();
+    refresh(research_time);
+}
+
+function auctionStep() {
+    socket.json.emit('auctionstep', {msg: 'Аукцион'});
+    socket.json.emit('refreshtimer', {time: timeout});
+    refresh(timeout);
+}
+
+function researchStep() {
+    socket.json.emit('researchstep', {msg: 'Ознакомьтесь с картиной'});
+    socket.json.emit('refreshtimer', {time: research_time});
+    refresh(research_time);
+}
+
+function changePicture() {
+    socket.json.emit('changepicture', {ind: pic_num++});
+}
+
+function stopAuction() {
+    socket.json.emit('stopAuction', {ind: pic_num++});
 }
 
 $('#start').on('click', function() {
-    nextStepAuction(research_time, 'Ознакомьтесь с картиной');
+    startAuction();
     $('#start').hide();
 });
 
@@ -60,11 +82,11 @@ function refresh(min)
         sec="0";
         clearInterval(inter);
         if (isNewAuctStep) {
-            nextStepAuction(timeout, 'Аукцион');
-            pic_num++;
+            auctionStep();
             isNewAuctStep = false;
         } else {
-            nextStepAuction(research_time, 'Ознакомьтесь с картиной');
+            changePicture();
+            researchStep();
             isNewAuctStep = true;
         }
     }

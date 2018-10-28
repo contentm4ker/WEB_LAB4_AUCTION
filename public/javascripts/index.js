@@ -1,6 +1,13 @@
 $(document).ready(function(){
+    $('#status').text(' ');
+    $('#btn-request').hide();
     chat();
     $('#send').on('click', send);
+    $('#btn-request').on('click', function () {
+        socket.json.emit('msg', {name: $('#username').text(), value: 'Подал заявку на участие'});
+        $('#status').text('Вы участвуете в аукционе на данную картину').show();
+        $('#btn-request').hide();
+    });
 
     var socket;
 
@@ -36,15 +43,36 @@ $(document).ready(function(){
                 }
             });
             socket.on('startauction', function (msg) {
-                $('#info-pannel').show();
-                $('#img-info').show();
-                clearInterval(inter);
-                sec="0";
-                refresh(msg.time);
+                $('#img-info-auction, #btn-request').show();
+                $('#info').text(msg.info);
+            });
+            socket.on('changepicture', function (msg) {
                 $('#pic-name').text(msg.author + ' / ' + msg.name);
                 $('#pic-img, #pic-img-big').prop('src', msg.imgsrc);
                 $('#disc').text(msg.disc);
+            });
+            socket.on('auctionstep', (msg) => {
+                if ($('#status').text() == ' ')
+                    $('#status').text('');
                 $('#info').text(msg.info);
+                $('#btn-request').hide();
+            });
+            socket.on('researchstep', (msg) => {
+                $('#status').text(' ').hide();
+                $('#info').text(msg.info);
+                $('#btn-request').show();
+            });
+            socket.on('refreshtimer', function (msg) {
+                clearInterval(inter);
+                sec="0";
+                refresh(msg.time);
+                if ($('#status').text() == '') {
+                    $('#status').text('Вы не принимаете участие в торгах, ожидайте').show();
+                    $('#btn-request').hide();
+                }
+            });
+            socket.on('stopauction', (msg) => {
+
             });
         });
     }

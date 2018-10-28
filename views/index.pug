@@ -8,6 +8,7 @@ block content
         div#users(style="width: 100%; height: 100%; border:1.5px solid #1b97f3;" +
         "font:16px/26px Georgia, Garamond, Serif;overflow-y: scroll; overflow-x: hidden")
     div#res-msg-inp.w3-container.w3-card-4.w3-half.w3-display-topleft.w3-animate-zoom(style="width:500px")
+        p#status(hidden)
         p#username= nickname
         p#money= `Средства: ${money}`
         p
@@ -15,20 +16,22 @@ block content
             input#msg.w3-input(placeholder='Message')
         p
             button#send.w3-btn.w3-padding.w3-teal Отправить сообщение
+            button#btn-request.w3-btn.w3-padding.w3-teal Подать заявку
 
-    div#info-pannel.w3-panel.w3-pale-blue.w3-leftbar.w3-rightbar.w3-border-blue.w3-display-topright.w3-margin-right.w3-animate-zoom(style="width:616px;", hidden)
-        p#info.w3-large.w3-opacity.w3-center Ознакомтесь с картиной
-        p.w3-large.w3-opacity.w3-center#timer
-    div#img-info.w3-display-right.w3-margin-right(hidden)
-        div.w3-container.w3-cell
-            div#pic.w3-card-4.w3-animate-zoom
-                div.w3-container.w3-center.w3-blue
-                    p#pic-name.shadow-text
-                img#pic-img.w3-hover-opacity.w3-border.w3-padding(width=300, style="cursor:zoom-in;",
-                | onclick="document.getElementById('modal01').style.display='block'")
+    div#img-info-auction.w3-container.w3-display-topright(hidden)
+        div#info-pannel.w3-panel.w3-pale-blue.w3-leftbar.w3-rightbar.w3-border-blue.w3-animate-zoom.w3-margin-left(style="width:616px;")
+            p#info.w3-large.w3-opacity.w3-center Ознакомтесь с картиной
+            p.w3-large.w3-opacity.w3-center#timer
+        div#img-info.w3-margin-right
+            div.w3-container.w3-cell
+                div#pic.w3-card-4.w3-animate-zoom
+                    div.w3-container.w3-center.w3-blue
+                        p#pic-name.shadow-text
+                    img#pic-img.w3-hover-opacity.w3-border.w3-padding(width=300, style="cursor:zoom-in;",
+                    | onclick="document.getElementById('modal01').style.display='block'")
 
-        div.w3-container.w3-cell.w3-animate-zoom.w3-panel.w3-blue(style="width:300px;")
-            p#disc.w3-large.w3-opacity(align="justify")
+            div.w3-container.w3-cell.w3-animate-zoom.w3-panel.w3-blue(style="width:300px;")
+                p#disc.w3-large.w3-opacity(align="justify")
 
 
     div#modal01.w3-modal(onclick="this.style.display='none'")

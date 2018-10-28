@@ -41,13 +41,34 @@ io.sockets.on('connection', (socket) => {
     });
     socket.on('startauction', (msg) => {
         socket.broadcast.emit('startauction', {
-            info: msg.msg,
-            time: msg.time,
+            info: msg.msg
+        });
+    });
+    socket.on('auctionstep', (msg) => {
+        socket.broadcast.emit('auctionstep', {
+            info: msg.msg
+        });
+    });
+    socket.on('researchstep', (msg) => {
+        socket.broadcast.emit('researchstep', {
+            info: msg.msg
+        });
+    });
+    socket.on('changepicture', (msg) => {
+        socket.broadcast.emit('changepicture', {
             name: paintings[msg.ind].name,
             author: paintings[msg.ind].author,
             imgsrc: paintings[msg.ind].imgPath,
             disc: paintings[msg.ind].discription
         });
+    });
+    socket.on('refreshtimer', (msg) => {
+        socket.broadcast.emit('refreshtimer', {
+            time: msg.time
+        });
+    });
+    socket.on('stopauction', (msg) => {
+        socket.broadcast.emit('stopauction');
     });
 });
 
