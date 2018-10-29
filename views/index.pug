@@ -18,6 +18,7 @@ block content
         p
             button#send.w3-btn.w3-padding.w3-teal Отправить сообщение
             button#btn-request.w3-btn.w3-padding.w3-teal.w3-margin-left Подать заявку
+            button#btn-buy.w3-btn.w3-padding.w3-teal.w3-margin-left(onclick="$('#shop-list').css('display', 'block')") Покупки
         div#auctionbox(hidden)
             p#currentbet Текущая ставка
             p#yourmoney Ваша ставка
@@ -50,6 +51,21 @@ block content
     div#modal01.w3-modal(onclick="this.style.display='none'")
         div.w3-modal-content.w3-animate-zoom
             img#pic-img-big(style="width:100%")
+
+    div#shop-list.w3-modal
+        div.w3-modal-content.w3-card-4.w3-animate-zoom(style="max-width:600px")
+            header.w3-container.w3-indigo
+                span.w3-button.w3-display-topright(onclick="$('#shop-list').css('display', 'none')") &times;
+                h2.w3-center Покупки
+            table#buys.w3-table-all.w3-hoverable.w3-card-4.w3-centered
+                tr
+                    th Название
+                    th Автор
+                    th Начальная цена
+                    th Цена продажи
+                    th Картина
+
+
 
     script(src="/socket.io/socket.io.js")
     script(src="/javascripts/index.js")

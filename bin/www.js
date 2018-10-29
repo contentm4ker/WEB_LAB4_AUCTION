@@ -19,7 +19,7 @@ for (key in auctionInfo.auctMembers) {
     auctionInfo.auctMembers[key].ind = Number(key);
     auctMembers.push(auctionInfo.auctMembers[key]);
 }
-console.log('myDATA', auctTimeSetts, paintings);
+
 //end of loading data
 
 
@@ -47,8 +47,6 @@ io.sockets.on('connection', (socket) => {
     socket.on('auctionstep', (msg) => {
         socket.broadcast.emit('auctionstep', {
             info: msg.msg,
-            min: paintings[msg.ind].step.min,
-            max: paintings[msg.ind].step.max
         });
     });
     socket.on('researchstep', (msg) => {
@@ -58,11 +56,14 @@ io.sockets.on('connection', (socket) => {
     });
     socket.on('changepicture', (msg) => {
         socket.broadcast.emit('changepicture', {
+            ind: msg.ind,
             name: paintings[msg.ind].name,
             author: paintings[msg.ind].author,
             imgsrc: paintings[msg.ind].imgPath,
             price: paintings[msg.ind].startPrice,
-            disc: paintings[msg.ind].discription
+            disc: paintings[msg.ind].discription,
+            min: paintings[msg.ind].step.min,
+            max: paintings[msg.ind].step.max
         });
     });
     socket.on('refreshtimer', (msg) => {
@@ -78,8 +79,18 @@ io.sockets.on('connection', (socket) => {
             money: msg.money
         });
     });
+    socket.on('updatepictureinfo', (msg) => {
+        socket.broadcast.emit('updatepictureinfo', {
+            name: msg.name,
+            price: msg.price,
+            id: msg.id
+        });
+    });
+    socket.on('updatemoney', (msg) => {
+        socket.broadcast.emit('updatemoney', {name: msg.name, money: msg.money});
+    });
     socket.on('stopauction', (msg) => {
-        socket.broadcast.emit('stopauction');
+        socket.broadcast.emit('stopauction', {ind: msg.ind});
     });
 });
 

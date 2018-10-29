@@ -29,6 +29,18 @@ socket.on('connect', function () {
             isRight = true;
         }
     });
+    socket.on('updatepictureinfo', function (msg) {
+        $(`#pictable tr:nth-child(${msg.id + 2}) :nth-child(5)`).text(msg.name);
+        $(`#pictable tr:nth-child(${msg.id + 2}) :nth-child(6)`).text(msg.price);
+    });
+    socket.on('updatemoney', function (msg) {
+        for (let i = 2; i <= picsnum + 1; i++) {
+            if($(`#usertable tr:nth-child(${i}) :nth-child(2)`).text() == msg.name) {
+                $(`#usertable tr:nth-child(${i}) :nth-child(3)`).text(msg.money);
+                break;
+            }
+        }
+    });
 });
 
 var pic_num = 0;
@@ -42,7 +54,7 @@ function startAuction() {
 }
 
 function auctionStep() {
-    socket.json.emit('auctionstep', {msg: 'Аукцион', ind: pic_num});
+    socket.json.emit('auctionstep', {msg: 'Аукцион'});
     socket.json.emit('refreshtimer', {time: timeout});
     refresh(timeout);
 }
@@ -58,7 +70,7 @@ function changePicture() {
 }
 
 function stopAuction() {
-    socket.json.emit('stopauction', {ind: pic_num++});
+    socket.json.emit('stopauction', {ind: pic_num});
 }
 
 $('#start').on('click', function() {
@@ -94,7 +106,7 @@ function refresh(min)
                 isNewAuctStep = true;
             }
         } else {
-            alert('Аукцион закончен')
+            stopAuction()
         }
     }
 }
