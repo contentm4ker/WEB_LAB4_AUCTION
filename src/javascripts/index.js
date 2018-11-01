@@ -1,9 +1,9 @@
-require('../stylesheets/style.css');
-require('../stylesheets/chat.css');
-require('../stylesheets/scrollbar.css');
-require.context("../img", true, /.*\.(jpg|jpeg|gif|png)$/);
 
 $(document).ready(function(){
+    require('../stylesheets/style.css');
+    require('../stylesheets/chat.css');
+    require('../stylesheets/scrollbar.css');
+    require.context("../img", true, /.*\.(jpg|jpeg|gif|png)$/);
     let a = document.kek;
     $('#status').text(' ');
 
@@ -171,24 +171,26 @@ $(document).ready(function(){
             socket.json.emit('msg', {name: $('#username').text(), value: $('#msg').val()});
         }
     }
-});
-var isFirstRequest = true;
-var current_bet = 0;
-var my_bet = 0;
 
-var sec=0;
-var inter;
-function refresh(min)
-{
-    if(--sec == -1){
-        sec = 59;
-        min = min - 1;
+    var isFirstRequest = true;
+    var current_bet = 0;
+    var my_bet = 0;
+
+    var sec=0;
+    var inter;
+    function refresh(min)
+    {
+        if(--sec == -1){
+            sec = 59;
+            min = min - 1;
+        }
+        let time=(min <= 9 ? "0"+min : min) + ":" + (sec <= 9 ? "0" + sec : sec);
+        if(document.getElementById){timer.innerHTML=time;}
+        inter = setTimeout(function() {refresh(min);}, 1000);
+        if(min=='00' && sec=='00'){
+            sec="0";
+            clearInterval(inter);
+        }
     }
-    let time=(min <= 9 ? "0"+min : min) + ":" + (sec <= 9 ? "0" + sec : sec);
-    if(document.getElementById){timer.innerHTML=time;}
-    inter=setTimeout(`refresh(${min})`, 1000);
-    if(min=='00' && sec=='00'){
-        sec="0";
-        clearInterval(inter);
-    }
-}
+});
+
