@@ -1,21 +1,36 @@
+// @flow
+
 var app = require('../app');
 
-var server = require('http').Server(app);
+var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var debug = require('debug')('lab4-auction-event:server');
+var logger = require('../logger');
 
-server.listen(80);
+
+var port = 80;
+server.listen(port, ()=>{
+    logger.verbose(`HTTP server started at http://localhost:${port}`);
+});
+server.on('error', onError);
+server.on('listening', onListening);
 
 
 //loading  auction data from json
-var auctionInfo = require('../data/auction_settings');
+var auctionInfo;
+if(process.env.NODE_ENV !== 'test') {
+    auctionInfo = require('../data/auction_settings');
+} else {
+    auctionInfo = require('../data/test');
+}
 var auctTimeSetts = auctionInfo.auctSettings;
 var paintings = [];
 var auctMembers = [];
-for (key in auctionInfo.paintings) {
+for (let key in auctionInfo.paintings) {
     auctionInfo.paintings[key].ind = Number(key);
     paintings.push(auctionInfo.paintings[key]);
 }
-for (key in auctionInfo.auctMembers) {
+for (let key in auctionInfo.auctMembers) {
     auctionInfo.auctMembers[key].ind = Number(key);
     auctMembers.push(auctionInfo.auctMembers[key]);
 }
@@ -98,3 +113,42 @@ function send(socket, msg, time) {
     socket.json.emit('msg', {'message': msg, 'time': time});
     socket.broadcast.emit('msg', {'message': msg, 'time': time});
 }
+
+
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    var bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+}
+
+module.exports = server;

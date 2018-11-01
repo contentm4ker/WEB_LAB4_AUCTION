@@ -1,10 +1,17 @@
+// @flow
+
 var express = require('express');
 var router = express.Router();
 var nickname = "";
 
-var auctionInfo = require('../data/auction_settings');
+var auctionInfo;
+if(process.env.NODE_ENV !== 'test') {
+    auctionInfo = require('../data/auction_settings');
+} else {
+    auctionInfo = require('../data/test');
+}
 var auctMembers = [];
-for (key in auctionInfo.auctMembers) {
+for (let key in auctionInfo.auctMembers) {
     auctionInfo.auctMembers[key].ind = Number(key);
     auctMembers.push(auctionInfo.auctMembers[key]);
 }
@@ -22,6 +29,7 @@ router.post('/', function (req, res) {
         if (auctMembers[i].name === nickname) {
             res.status(200);
             res.send({
+                message: 'User successfully authorized!',
                 nickname: nickname,
                 money: auctMembers[i].money
             });

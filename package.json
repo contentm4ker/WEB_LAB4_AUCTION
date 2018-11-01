@@ -4,7 +4,12 @@
   "description": "Лабораторная работа 4 по дисциплине \"WEB-Технологии\"",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "SET NODE_ENV=test&& mocha",
+    "build": "webpack -p --mode production --colors --progress",
+    "prepublish": "npm run build",
+    "flow": "flow",
+    "start": "SET NODE_ENV=dev && node bin/www.js",
+    "watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -17,9 +22,45 @@
   },
   "homepage": "https://github.com/destrosw/WEB_LAB4_AUCTION_EVENT#readme",
   "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "autoprefixer": "^9.3.1",
+    "babel-loader": "^8.0.4",
     "cookie-parser": "^1.4.3",
+    "copy-webpack-plugin": "^4.6.0",
+    "css-loader": "^1.0.1",
+    "cssnano": "^4.1.7",
     "express": "^4.16.4",
+    "file-loader": "^2.0.0",
+    "flow-bin": "^0.85.0",
+    "flow-remove-types": "^1.2.3",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "image-webpack-loader": "^4.4.0",
+    "mini-css-extract-plugin": "^0.4.4",
+    "morgan": "^1.9.1",
+    "node-sass": "^4.9.4",
+    "postcss-loader": "^3.0.0",
     "pug": "^2.0.3",
-    "socket.io": "^2.1.1"
+    "raven": "^2.6.4",
+    "rimraf": "^2.6.2",
+    "sass-loader": "^7.1.0",
+    "socket.io": "^2.1.1",
+    "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "url-loader": "^1.1.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
+    "winston": "^3.0.0",
+    "winston-raven-sentry": "^2.0.0",
+    "yargs": "^12.0.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0",
+    "webpack": "^4.23.1"
   }
 }
